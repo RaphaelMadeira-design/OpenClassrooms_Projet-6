@@ -17,8 +17,6 @@ async function fetchProjects() {
 
 // AFFICHAGE DES PROJETS
 function displayProjects(projects) {
-    const gallery = document.querySelector(".gallery")
-    gallery.innerHTML = ""
 
     projects.forEach(project => {
             const figure = document.createElement('figure')
@@ -30,9 +28,8 @@ function displayProjects(projects) {
             figcaption.textContent = project.title
 
             figure.append(figureImg, figcaption)
-            gallery.appendChild(figure)
+            document.querySelector(".gallery").appendChild(figure)
         }) 
 }
 
 fetchProjects()
-
