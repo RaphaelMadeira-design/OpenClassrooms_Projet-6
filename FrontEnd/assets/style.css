@@ -123,7 +123,34 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+	margin-bottom: 1.5em;
+}
+.filters {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 3.5em;
+}
+.filters button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 100px;
+	height: 37px;
+	background: none;
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	font-family: 'Syne';
+	font-size: 16px;
+	font-weight: 700;
+	padding: 9px;
+	color: #1D6154;
+	transition: 500ms;
+}
+.filters button:hover,
+.filters button.active {
+	background-color: #1D6154;
+	color: white;
 }
 .gallery {
 	width: 100%;
