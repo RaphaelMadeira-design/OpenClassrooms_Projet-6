@@ -1,4 +1,4 @@
-// FETCH
+// FETCH DES PROJETS
 async function fetchProjects() {
     const urlAPI = "http://localhost:5678/api/works"
     try {
