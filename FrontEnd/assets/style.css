@@ -146,6 +146,7 @@ li:hover {
 	padding: 9px;
 	color: #1D6154;
 	transition: 500ms;
+	cursor: pointer;
 }
 .filters button:hover,
 .filters button.active {

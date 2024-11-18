@@ -1,51 +1,13 @@
-// URL des deux API
-const urlAPIProjects = "http://localhost:5678/api/works"
-const urlAPICategories = "http://localhost:5678/api/categories"
+import { getWorks, getCategories } from './api.js'
+import { displayProjectsGallery } from './functions.js'
 
-// FETCH
-async function fetchData() {
-    try {
-        const projectsResponse = await fetch(urlAPIProjects)
-        const categoriesResponse = await fetch(urlAPICategories)
-
-        if (!projectsResponse.ok) {
-            throw new Error(`Response status for products: ${projectsResponse.status}`)
-          }
-          if (!categoriesResponse.ok) {
-            throw new Error(`Response status for categories: ${categoriesResponse.status}`)
-          }
-
-        const projects = await projectsResponse.json()
-        const categories = await categoriesResponse.json()
-        
-        console.log('Tableau Projets :', projects)
-        console.log('Tableau Catégories :', categories)
-        displayProjects(projects)  // Affiche tous les projets
-        generateFilters(categories, projects)  // Crée les filtres avec les catégories
-
-    } catch (error) {
-        console.error("Erreur:", error.message)
-    }
-}
+const works = await getWorks();
+const categories = await getCategories();
+const gallery = document.querySelector(".gallery")
 
 // AFFICHAGE DES PROJETS
-function displayProjects(projects) {
-    const gallery = document.querySelector(".gallery")
-    gallery.innerHTML = ""
-
-    projects.forEach(function (project) {
-        const figure = document.createElement('figure')
-        const figureImg = document.createElement('img')
-        const figcaption = document.createElement('figcaption')
-
-        figureImg.src = project.imageUrl
-        figureImg.alt = project.title
-        figcaption.textContent = project.title
-
-        figure.append(figureImg, figcaption)
-        gallery.appendChild(figure)
-    })
-}
+displayProjectsGallery(works, gallery);
+generateFilters(categories, works)  // Crée les filtres avec les catégories
 
 // LE BOUTON
 function createBtn(text, onClick) {
@@ -70,18 +32,16 @@ function generateFilters(categories, projects) {
     const filters = document.querySelector(".filters")
     filters.innerHTML = ""
     // Création du bouton "Tous"
-    const allBtn = createBtn("Tous", function () {
-        displayProjects(projects)
+    const allBtn = createBtn("Tous", () => {
+        displayProjectsGallery(projects, gallery)
         activeBtn(allBtn)
     })
     filters.appendChild(allBtn)
 
-    categories.forEach(function (category) {
-        const filterBtn = createBtn(category.name, function () {
-            const filteredProjects = projects.filter(function (project) {
-                return project.categoryId === category.id
-            })
-            displayProjects(filteredProjects)
+    categories.forEach(category => {
+        const filterBtn = createBtn(category.name, () => {
+            const filteredProjects = projects.filter(project => project.categoryId === category.id)
+            displayProjectsGallery(filteredProjects, gallery)
             activeBtn(filterBtn)
         })
         filters.appendChild(filterBtn)
@@ -89,5 +49,3 @@ function generateFilters(categories, projects) {
 
     activeBtn(allBtn)
 }
-
-fetchData()
