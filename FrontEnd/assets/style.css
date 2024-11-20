@@ -2,7 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -65,7 +64,6 @@ header {
 section {
 	margin: 50px 0
 }
-
 h1{
 	display: flex;
 	flex-direction: column;
@@ -74,14 +72,11 @@ h1{
 	font-weight: 800;
 	color: #B1663C
 }
-
 h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
-
 h2{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -92,13 +87,14 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
 nav li {
-	padding: 0 10px;
+	padding: 0 22px;
 	font-size: 1.2em;
 }
-
+nav img {
+	width: 22px;
+}
 li:hover {
 	color: #B1663C;
 }
@@ -114,7 +110,6 @@ li:hover {
 	margin: auto;
 	width: 80%;
 }
-
 #introduction article {
 	flex: 1
 }
@@ -164,7 +159,6 @@ li:hover {
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
 }
-
 .gallery img {
 	width: 100%;
 }
@@ -177,7 +171,6 @@ li:hover {
 #login {
 	margin-top: 100px;
 }
-
 #contact > *,
 #login > * {
 	text-align: center;
@@ -197,7 +190,6 @@ li:hover {
 	display: flex;
 	flex-direction: column;
 }
-
 #contact input,
 #login input {
 	height: 50px;
@@ -213,23 +205,23 @@ li:hover {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
 	background-color: #1D6154;
-	margin : 2em auto ;
+	margin : 2em auto;
 	width: 180px;
+	height: 40px !important;
 	text-align: center;
-	border-radius: 60px ;
-	border : none;
+	border-radius: 60px;
 }
-
+input[type="submit"]:hover {
+	background-color: #0E2F28;
+}
 footer {
 	margin-top: auto;
 }
-
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
