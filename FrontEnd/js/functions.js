@@ -36,10 +36,19 @@ const displayProjectsGallery = (projects, gallery) => {
 }
 
 function displayErrorMessage() {
-    const errorBox = document.createElement("div");
-    errorBox.className = "errorBox"; 
-    errorBox.innerHTML = "E-mail ou mot de passe incorrect"; 
-    document.querySelector("form").prepend(errorBox);
+    // Vérifie s'il y a déjà un message d'erreur
+    const activeErrorBox = document.querySelector(".errorBox")
+    if (activeErrorBox) {
+        activeErrorBox.remove() // Supprime l'ancien message d'erreur
+    }
+
+    // Crée un nouvel élément d'erreur
+    const errorBox = document.createElement("div")
+    errorBox.className = "errorBox"
+    errorBox.textContent = "E-mail ou mot de passe incorrect"
+
+    // Insère l'élément d'erreur dans le formulaire
+    document.querySelector("form").prepend(errorBox)
 }
 
 export { displayProjectsGallery, displayErrorMessage }

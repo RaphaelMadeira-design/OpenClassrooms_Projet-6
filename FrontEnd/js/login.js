@@ -1,45 +1,28 @@
 import { displayErrorMessage } from './functions.js'
+import { userAuth } from './api.js'
 
-const urlAPILogin = "http://localhost:5678/api/users/login";
 const loginForm = document.getElementById("loginForm")
 
 // Évènement qui s'active quand on soumet le formulaire
-loginForm.addEventListener('submit', userLogin);
+loginForm.addEventListener('submit', userLogin)
 
 async function userLogin(event) {
-  event.preventDefault();
+    event.preventDefault()
 
-  // Récupère les valeurs des champs du formulaire
-  let userInfo = {
-    email: document.getElementById('email').value,
-    password: document.getElementById('password').value,
-  };
-
-  // Vérifie s'il y a déjà un message d'eereur sur la page
-  const activeErrorBox = document.querySelector('.errorBox');
-  if (activeErrorBox) {
-    activeErrorBox.remove();
-  }
+    let user = {
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+    }
 
   // Requête vers l'API pour connecter l'utilisateur
-  try {
-    let response = await fetch(urlAPILogin, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(userInfo),
-    });
+    try {
+        const result = await userAuth(user)
 
-    if (response.status !== 200) {
-      displayErrorMessage();
-    } else {
-      let result = await response.json();
+        const token = result.token
+        sessionStorage.setItem('authToken', token)
 
-      const token = result.token;
-      sessionStorage.setItem('authToken', token);
-
-      window.location.href = 'index.html';
+        window.location.href = 'index.html'
+    } catch (error) {
+        displayErrorMessage()
     }
-  } catch (error) {
-    console.error('Error:', error.message)
-  }
 }
