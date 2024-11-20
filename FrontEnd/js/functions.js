@@ -35,4 +35,11 @@ const displayProjectsGallery = (projects, gallery) => {
     })
 }
 
-export { displayProjectsGallery }
+function displayErrorMessage() {
+    const errorBox = document.createElement("div");
+    errorBox.className = "errorBox"; 
+    errorBox.innerHTML = "E-mail ou mot de passe incorrect"; 
+    document.querySelector("form").prepend(errorBox);
+}
+
+export { displayProjectsGallery, displayErrorMessage }
