@@ -64,6 +64,9 @@ header {
 section {
 	margin: 50px 0
 }
+.active {
+	font-weight: 600;
+}
 h1{
 	display: flex;
 	flex-direction: column;
@@ -224,6 +227,14 @@ input[type="submit"] {
 }
 input[type="submit"]:hover {
 	background-color: #0E2F28;
+}
+.errorBox {
+	display: flex;
+	justify-content: center;
+	background-color: #B1663C;
+	color: white;
+	padding: 10px;
+	border-radius: 10px;
 }
 footer {
 	margin-top: auto;
