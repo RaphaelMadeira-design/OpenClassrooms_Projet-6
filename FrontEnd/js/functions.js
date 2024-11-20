@@ -1,3 +1,23 @@
+/* POUR L'ANCRE CONTACT DEPUIS PAGE LOGIN */
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.hash) {
+        const goToHash = () => {
+            const anchor = document.querySelector(window.location.hash);
+            if (anchor) {
+                anchor.scrollIntoView();
+            }
+        };
+
+        const checkDOMContentLoaded = setInterval(() => {
+            const anchor = document.querySelector(window.location.hash);
+            if (anchor) {
+                clearInterval(checkDOMContentLoaded);
+                goToHash();
+            }
+        }, 100); 
+    }
+});
+
 const displayProjectsGallery = (projects, gallery) => {
     gallery.innerHTML = ""
 

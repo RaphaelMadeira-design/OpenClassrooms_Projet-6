@@ -92,11 +92,16 @@ nav li {
 	padding: 0 22px;
 	font-size: 1.2em;
 }
+nav li a {
+	color: #000;
+	text-decoration: none;
+}
+nav li a:hover,
+nav li a:visited {
+	font-weight: 600;
+}
 nav img {
 	width: 22px;
-}
-li:hover {
-	color: #B1663C;
 }
 #introduction {
 	display: flex;
@@ -180,7 +185,8 @@ li:hover {
 	margin-bottom: 20px;
 }
 #login a {
-	text-align: center;
+	display: flex;
+	justify-content: center;
 	color: #3D3D3D;
 }
 #contact form,
@@ -221,6 +227,7 @@ input[type="submit"]:hover {
 }
 footer {
 	margin-top: auto;
+	background-color: #FFF;
 }
 footer nav ul {
 	display: flex;
