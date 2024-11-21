@@ -51,26 +51,30 @@ function generateFilters(categories, projects) {
 }
 
 function adminMode() {
-    const authBtn = document.getElementById("authBtn")
+    const authBtn = document.getElementById("authBtn");
 
+    // Vérifier si l'utilisateur est connecté via sessionStorage
     if (sessionStorage.authToken) {
-        (!document.querySelector(".editMode"))
         const editMode = document.createElement("div")
         editMode.className = "editMode"
         editMode.innerHTML = '<i class="fa-solid fa-pen-to-square"></i><p>Mode édition</p>'
-        document.body.prepend(editMode)
+        document.body.prepend(editMode) // Ajouter en haut du body
         authBtn.textContent = "logout"
     } else {
+        // Mettre à jour le texte du bouton
         authBtn.textContent = "login"
     }
 }
 
+// Ajouter un gestionnaire d'événement pour le bouton Login/Logout
 authBtn.addEventListener("click", () => {
+    // Si l'utilisateur est connecté
     if (sessionStorage.authToken) {
-        sessionStorage.removeItem("authToken")
-    }
-
+        sessionStorage.removeItem("authToken") // Déconnecter l'utilisateur
+    } 
+    // Mettre à jour l'interface
     adminMode()
-});
+})
 
+// Initialiser l'interface au chargement de la page
 adminMode()
