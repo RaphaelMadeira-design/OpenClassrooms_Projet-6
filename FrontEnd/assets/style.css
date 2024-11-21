@@ -47,15 +47,18 @@ table {
 }
 /** end reset css**/
 body {
+	background: #FFFEF8;
+	font-family: 'Work Sans';
+}
+.wrapper {
 	max-width: 1140px;
 	margin: auto;
-	font-family: 'Work Sans' ;
 	font-size: 14px;
-	background: #FFFEF8;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -244,4 +247,18 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em;
+}
+
+.editMode {
+	position: relative;
+	width: 100%;
+	height: 60px;
+	background-color: #000;
+	display: flex;
+	color: white;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	font-weight: 400;
+	font-size: 16px;
 }

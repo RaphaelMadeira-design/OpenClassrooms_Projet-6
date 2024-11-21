@@ -25,10 +25,10 @@ const getCategories = async () => {
 const userAuth = async (user) => {
     try {
         const response = await fetch(urlAPILogin, {
-            method: 'POST', // Méthode HTTP utilisée (POST pour envoyer des données)
-            body: JSON.stringify(user), // Convertit les données de l'utilisateur en chaîne JSON
-            headers: {'Content-Type': 'application/json'}, // Indique que les données envoyées sont en format JSON
-        });
+            method: 'POST', 
+            body: JSON.stringify(user),
+            headers: {'Content-Type': 'application/json'},
+        })
         const userLogin = await response.json()
         if (!response.ok || !userLogin.token) throw new Error()
         return userLogin

@@ -7,22 +7,23 @@ const loginForm = document.getElementById("loginForm")
 loginForm.addEventListener('submit', userLogin)
 
 async function userLogin(event) {
-    event.preventDefault()
+  event.preventDefault()
 
-    let user = {
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-    }
+  // Récupère les valeurs des champs du formulaire
+  let user = {
+    email: document.getElementById('email').value,
+    password: document.getElementById('password').value,
+  }
 
-  // Requête vers l'API pour connecter l'utilisateur
-    try {
-        const result = await userAuth(user)
+  // Requête API pour connecter l'utilisateur
+  try {
+      const result = await userAuth(user)
+      // Récupère le token et stocke le token
+      const token = result.token
+      sessionStorage.setItem('authToken', token)
 
-        const token = result.token
-        sessionStorage.setItem('authToken', token)
-
-        window.location.href = 'index.html'
-    } catch (error) {
-        displayErrorMessage()
-    }
+      window.location.href = 'index.html'
+  } catch (error) {
+    displayErrorMessage()
+  }
 }

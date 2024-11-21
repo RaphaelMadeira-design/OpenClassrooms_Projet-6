@@ -49,3 +49,28 @@ function generateFilters(categories, projects) {
 
     activeBtn(allBtn)
 }
+
+function adminMode() {
+    const authBtn = document.getElementById("authBtn")
+
+    if (sessionStorage.authToken) {
+        (!document.querySelector(".editMode"))
+        const editMode = document.createElement("div")
+        editMode.className = "editMode"
+        editMode.innerHTML = '<i class="fa-solid fa-pen-to-square"></i><p>Mode édition</p>'
+        document.body.prepend(editMode)
+        authBtn.textContent = "logout"
+    } else {
+        authBtn.textContent = "login"
+    }
+}
+
+authBtn.addEventListener("click", () => {
+    if (sessionStorage.authToken) {
+        sessionStorage.removeItem("authToken")
+    }
+
+    adminMode()
+});
+
+adminMode()
