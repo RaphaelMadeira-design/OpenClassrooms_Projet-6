@@ -65,7 +65,7 @@ function adminMode() {
 
         // Bouton "modifier"
         const portfolioTitle = document.querySelector("#portfolio h2")
-        if (portfolioTitle && !document.querySelector(".editBtn")) {
+        if (!document.querySelector(".editBtn")) {
             const editBtn = document.createElement("div")
             editBtn.className = "editBtn"
             editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i><p>modifier</p>'
