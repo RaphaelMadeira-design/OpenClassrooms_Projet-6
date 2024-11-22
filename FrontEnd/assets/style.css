@@ -89,6 +89,12 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+h3 {
+	color: #000;
+	font-family: 'Work Sans';
+	font-size: 26px;
+	font-weight: 400;
+}
 nav ul {
 	display: flex;
 	align-items: center;
@@ -153,9 +159,13 @@ nav img {
     font-size: 14px;
     cursor: pointer;
 	color: #000;
+	transition: 500ms;
 }
 #portfolio .editBtn i {
 	font-size: 16px;
+}
+#portfolio .editBtn:hover {
+	color: #B1663C;
 }
 .filters {
 	display: flex;
@@ -297,11 +307,27 @@ footer nav ul {
 	z-index: 2;
 }
 .modal-wrapper {
+	position: relative;
 	width: 630px;
 	max-width: calc(100vw - 20px);
 	max-height: calc(100vh - 20px);
-	padding: 20px;
+	padding: 60px 105px 45px 105px;
 	border-radius: 10px;
 	background-color: #FFF;
 	overflow: auto;
+}
+.modal-close {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	cursor: pointer;
+	font-size: 22px;
+	transition: 500ms;
+}
+.modal-close:hover {
+	color: #B1663C;
+	transform: scale(1.20);
+}
+.modal-title {
+	text-align: center;
 }
