@@ -294,6 +294,7 @@ footer nav ul {
 	justify-content: center;
 	align-items: center;
 	display: none;
+	z-index: 2;
 }
 .modal-wrapper {
 	width: 630px;
