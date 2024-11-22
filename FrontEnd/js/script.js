@@ -50,31 +50,42 @@ function generateFilters(categories, projects) {
     activeBtn(allBtn)
 }
 
+/* MODE ADMINISTRATEUR */
 function adminMode() {
-    const authBtn = document.getElementById("authBtn");
+    const authBtn = document.getElementById("authBtn")
 
-    // Vérifier si l'utilisateur est connecté via sessionStorage
     if (sessionStorage.authToken) {
-        const editMode = document.createElement("div")
-        editMode.className = "editMode"
-        editMode.innerHTML = '<i class="fa-solid fa-pen-to-square"></i><p>Mode édition</p>'
-        document.body.prepend(editMode) // Ajouter en haut du body
-        authBtn.textContent = "logout"
+        // Bannière "mode édition"
+        if (!document.querySelector(".editMode")) {
+            const editMode = document.createElement("div")
+            editMode.className = "editMode"
+            editMode.innerHTML = '<i class="fa-regular fa-pen-to-square"></i><p>Mode édition</p>'
+            document.body.prepend(editMode)
+        }
+
+        // Bouton "modifier"
+        const portfolioTitle = document.querySelector("#portfolio h2")
+        if (portfolioTitle && !document.querySelector(".editBtn")) {
+            const editBtn = document.createElement("div")
+            editBtn.className = "editBtn"
+            editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i><p>modifier</p>'
+            portfolioTitle.appendChild(editBtn)
+
+            // Ouvrir modal
+            editBtn.addEventListener('click', openModal);
+        }
+        authBtn.textContent = "logout";
     } else {
-        // Mettre à jour le texte du bouton
-        authBtn.textContent = "login"
+        authBtn.textContent = "login";
     }
 }
 
-// Ajouter un gestionnaire d'événement pour le bouton Login/Logout
+// Bouton login/logout
 authBtn.addEventListener("click", () => {
-    // Si l'utilisateur est connecté
     if (sessionStorage.authToken) {
-        sessionStorage.removeItem("authToken") // Déconnecter l'utilisateur
+        sessionStorage.removeItem("authToken")
     } 
-    // Mettre à jour l'interface
     adminMode()
 })
 
-// Initialiser l'interface au chargement de la page
 adminMode()
