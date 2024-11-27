@@ -1,58 +1,87 @@
-let modal = null
-const focusableSelector = 'button, a, input, textarea'
-let focusableElements = []
+import { getWorks } from './api.js'
+import { displayProjectsGallery } from './functions.js'
 
-const openModal = function(event) {
-    event.preventDefault()
-    modal = document.querySelector('.modal')
-    focusableElements = Array.from(modal.querySelectorAll(focusableSelector))
-    modal.style.display = 'flex'
-    modal.removeAttribute('aria-hidden')
-    modal.setAttribute('aria-modal', 'true')
-    modal.addEventListener('click', closeModal)
-    modal.querySelector('.modal-close').addEventListener('click', closeModal)
-    modal.querySelector('.modal-stop').addEventListener('click', stopPropagation)
-}
+const works = await getWorks();
 
-const closeModal = function(event) {
-    if (modal === null) return
-    event.preventDefault()
-    modal.style.display = 'none'
-    modal.removeAttribute('aria-modal')
-    modal.setAttribute('aria-hidden', 'true')
-    modal.removeEventListener('click', closeModal)
-    modal.querySelector('.modal-close').removeEventListener('click', closeModal)
-    modal.querySelector('.modal-stop').removeEventListener('click', stopPropagation)
-    modal = null
-}
+const openModal = (type = 'gallery') => {
+    const modal = document.querySelector('.modal');
+    const modalContent = modal.querySelector('.modal-content');
+    modalContent.innerHTML = '';
+    const modalTitle = document.createElement('h3');
+    modalTitle.classList.add('modal-title');
+    const separator = document.createElement('hr');
+    const actionButton = document.createElement('button');
+    modalContent.appendChild(modalTitle); 
+    actionButton.classList.add('modal-btn');
 
-// ACCESSIBILITÉ
-const stopPropagation = function (event) {
-    event.stopPropagation()
-}
+    modal.style.display = 'flex'; 
+    modal.addEventListener('click', closeModal);
+    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation);
 
-const focusInModal = function (event) {
-    event.preventDefault()
-    let index = focusableElements.findIndex(f => f === modal.querySelector(':focus'))
-    if (event.shiftKey === true) {
-        index--
-    } else {
-        index++
+    // Création de modal-gallery
+    let modalGallery = modal.querySelector('.modal-gallery');
+    if (!modalGallery) {
+        modalGallery = document.createElement('div');
+        modalGallery.classList.add('modal-gallery');
+        modalContent.appendChild(modalGallery);
     }
-    if (index >= focusableElements.length) {
-        index = 0
+
+    if (type === 'gallery') {
+        modalTitle.textContent = 'Galerie photo';
+        if (works) {
+            displayProjectsGallery(works, modalGallery, false);
+        }
+        actionButton.textContent = 'Ajouter une photo';
+        actionButton.addEventListener('click', () => openModal('add-image'));
+    }    
+
+    if (type === 'add-image') {
+        modalTitle.innerHTML = 'Ajouter une image'
     }
-    if (index < 0) {
-        index = focusableElements.length - 1
-    }
-    focusableElements[index].focus()
-}
+
+    modalContent.appendChild(separator);
+    modalContent.appendChild(actionButton);
+
+    // Icone delete
+    const modalGalleryImg = modalGallery.querySelectorAll('img');
+    modalGalleryImg.forEach(modalImg => {
+        const modalFigure = modalImg.closest('figure');
+        if (modalFigure) {
+            const deleteImg = document.createElement('delete-img');
+            deleteImg.classList.add('delete-img');
+            const deleteImgIcon = document.createElement('i');
+            deleteImgIcon.classList.add('fa-solid', 'fa-trash-can');
+            deleteImg.appendChild(deleteImgIcon);
+
+            modalFigure.style.position = 'relative';
+            modalFigure.appendChild(deleteImg);
+
+            deleteImg.addEventListener('click', (event) => {
+                event.stopPropagation();
+                modalFigure.remove();
+            });
+        }
+    });
+};
+
+const closeModal = (event) => {
+    event.preventDefault();
+    const modal = document.querySelector('.modal');
+    modal.style.display = 'none';
+    modal.removeEventListener('click', closeModal);
+    modal.querySelector('.modal-close').removeEventListener('click', closeModal);
+    modal.querySelector('.modal-wrapper').removeEventListener('click', stopPropagation);
+};
+
+const stopPropagation = (event) => {
+    event.stopPropagation();
+};
 
 window.addEventListener('keydown', function (press) {
     if (press.key === 'Escape' || press.key === 'Esc') {
         closeModal(press)
     }
-    if (press.key === 'Tab' && modal !== null) {
-        focusInModal(press)
-    }
-})
+});
+
+export { openModal, closeModal }

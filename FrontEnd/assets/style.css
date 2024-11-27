@@ -46,6 +46,22 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes slideFromTop {
+	from {
+		transform: translateY(-50px);
+	}
+	to {
+		transform: translateY(0px);
+	}
+}
 body {
 	background: #FFFEF8;
 	font-family: 'Work Sans';
@@ -294,27 +310,27 @@ footer nav ul {
 	font-size: 16px;
 }
 .modal {
+	overflow: auto;
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.3);
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	display: none;
 	z-index: 2;
+	animation: fadeIn 300ms both;
 }
 .modal-wrapper {
 	position: relative;
 	width: 630px;
-	max-width: calc(100vw - 20px);
-	max-height: calc(100vh - 20px);
 	padding: 60px 105px 45px 105px;
 	border-radius: 10px;
 	background-color: #FFF;
 	overflow: auto;
+	animation: slideFromTop 300ms both;
 }
 .modal-close {
 	position: absolute;
@@ -330,4 +346,68 @@ footer nav ul {
 }
 .modal-title {
 	text-align: center;
+}
+
+.modal-content {
+	display: flex;
+	flex-direction: column;
+	gap: 45px;
+}
+hr {
+    border: none;
+    height: 1px;
+    background-color: #B3B3B3;
+    margin: 20px 0 0 0;
+}
+.modal-btn {
+	border: none;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto;
+	min-width: 235px;
+	height: 35px;
+	text-align: center;
+	border-radius: 60px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+.modal-btn:hover {
+	background-color: #0E2F28;
+}
+.modal-gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px 10px;
+}
+.modal-gallery figure {
+    margin: 0;
+    text-align: center;
+}
+.modal-gallery img {
+    max-width: 100%;
+    height: auto;
+}
+.delete-img {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	background-color: #000;
+	height: 22px;
+	width: 22px;
+	border-radius: 4px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: 400ms;
+}
+.delete-img:hover {
+	background-color: #1D6154;
+}
+.delete-img i {
+    font-size: 13px;
+    color: white;
 }

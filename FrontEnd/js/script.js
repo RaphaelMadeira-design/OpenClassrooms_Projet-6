@@ -1,31 +1,14 @@
 import { getWorks, getCategories } from './api.js'
-import { displayProjectsGallery } from './functions.js'
+import { openModal } from './modal.js';
+import { displayProjectsGallery, createBtn, activeBtn } from './functions.js'
 
 const works = await getWorks();
 const categories = await getCategories();
 const gallery = document.querySelector(".gallery")
 
 // AFFICHAGE DES PROJETS
-displayProjectsGallery(works, gallery);
-generateFilters(categories, works)  // Crée les filtres avec les catégories
-
-// LE BOUTON
-function createBtn(text, onClick) {
-    const button = document.createElement("button")
-    button.textContent = text
-    button.addEventListener("click", onClick)
-    return button
-}
-
-// LE BOUTON ACTIF
-function activeBtn(button) {
-    const buttons = document.querySelectorAll(".filters button")
-    buttons.forEach(function (btn) {
-        btn.classList.remove("active")
-    })
-
-    button.classList.add("active")
-}
+displayProjectsGallery(works, gallery, true);
+generateFilters(categories, works)
 
 // ASSIGNER LES BOUTONS AUX FILTRES
 function generateFilters(categories, projects) {
@@ -72,7 +55,7 @@ function adminMode() {
             portfolioTitle.appendChild(editBtn)
 
             // Ouvrir modal
-            editBtn.addEventListener('click', openModal);
+            editBtn.addEventListener('click', () => openModal('gallery'));
         }
         authBtn.textContent = "logout";
     } else {

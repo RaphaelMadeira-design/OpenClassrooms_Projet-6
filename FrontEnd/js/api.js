@@ -37,4 +37,20 @@ const userAuth = async (user) => {
     }
 }
 
-export { getWorks, getCategories, userAuth }
+const deleteWorks = async (imageId) => {
+    try {
+        const urlAPIDelete = `${urlAPIProjects}/${imageId}`;
+        const response = await fetch(urlAPIDelete, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+        }
+        return true;
+    } catch (error) {
+        console.error("Error:", error.message)
+    }
+};
+
+export { getWorks, deleteWorks, getCategories, userAuth }

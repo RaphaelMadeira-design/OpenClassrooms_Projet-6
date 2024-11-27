@@ -18,21 +18,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const displayProjectsGallery = (projects, gallery) => {
-    gallery.innerHTML = ""
+const displayProjectsGallery = (projects, container, displayFigcaption = true) => {
+    container.innerHTML = '';
 
-    projects.forEach(function (project) {
-        const figure = document.createElement('figure')
-        const figureImg = document.createElement('img')
-        const figcaption = document.createElement('figcaption')
+    projects.forEach((project) => {
+        const figure = document.createElement('figure');
+        const figureImg = document.createElement('img');
 
-        figureImg.src = project.imageUrl
-        figureImg.alt = project.title
-        figcaption.textContent = project.title
+        figureImg.src = project.imageUrl;
+        figureImg.alt = project.title;
+        figureImg.dataset.id = project.id;
 
-        figure.append(figureImg, figcaption)
-        gallery.appendChild(figure)
+        figure.append(figureImg);
+
+        // Ajouter une légende si displayFigcaptions est 'true'
+        if (displayFigcaption) {
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = project.title;
+            figure.append(figcaption);
+        }
+
+        container.appendChild(figure);
+    });
+};
+
+// LE BOUTON DE FILTRES
+function createBtn(text, onClick) {
+    const button = document.createElement("button")
+    button.textContent = text
+    button.addEventListener("click", onClick)
+    return button
+}
+
+// LE BOUTON ACTIF
+function activeBtn(button) {
+    const buttons = document.querySelectorAll(".filters button")
+    buttons.forEach(function (btn) {
+        btn.classList.remove("active")
     })
+
+    button.classList.add("active")
 }
 
 function displayErrorMessage() {
@@ -51,4 +76,4 @@ function displayErrorMessage() {
     document.querySelector("form").prepend(errorBox)
 }
 
-export { displayProjectsGallery, displayErrorMessage }
+export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn }
