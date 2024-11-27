@@ -62,30 +62,6 @@ const deleteWorks = async (imageId) => {
     }
 }
 
-const postWorks = async (imageData) => {
-    try {
-      const response = await fetch('http://localhost:5678/api/works', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.authToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(imageData), // Envoi de l'image et ses données
-      });
-  
-      if (!response.ok) {
-        throw new Error('Erreur lors de l\'ajout de l\'image.');
-      }
-  
-      const newImage = await response.json();
-      // Mettre à jour la galerie avec la nouvelle image
-      works.push(newImage);
-      displayProjectsGallery(works, gallery);
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout de l\'image :', error.message);
-    }
-  };
 
 
-
-export { getWorks, deleteWorks, postWorks, getCategories, userAuth }
+export { getWorks, deleteWorks, getCategories, userAuth }

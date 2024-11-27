@@ -1,5 +1,5 @@
 import { getWorks, getCategories } from './api.js'
-import { openModal } from './modal.js';
+import { deleteWorkModal } from './modal.js';
 import { displayProjectsGallery, createBtn, activeBtn } from './functions.js'
 
 const works = await getWorks();
@@ -55,11 +55,11 @@ function adminMode() {
             portfolioTitle.appendChild(editBtn)
 
             // Ouvrir modal
-            editBtn.addEventListener('click', () => openModal('gallery'));
+            editBtn.addEventListener('click', () => deleteWorkModal())
         }
-        authBtn.textContent = "logout";
+        authBtn.textContent = "logout"
     } else {
-        authBtn.textContent = "login";
+        authBtn.textContent = "login"
     }
 }
 

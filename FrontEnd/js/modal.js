@@ -1,47 +1,46 @@
-import { getWorks, deleteWorks } from './api.js'
+import { getWorks, deleteWorks, getCategories } from './api.js'
 import { displayProjectsGallery } from './functions.js'
 
 const works = await getWorks()
 
-const openModal = (type = 'gallery') => {
-    const modal = document.querySelector('.modal')
-    const modalContent = modal.querySelector('.modal-content')
-    modalContent.innerHTML = ''
-    const modalTitle = document.createElement('h3')
-    modalTitle.classList.add('modal-title')
-    const separator = document.createElement('hr')
-    const actionButton = document.createElement('button')
-    modalContent.appendChild(modalTitle)
-    actionButton.classList.add('modal-btn')
+const modal = document.querySelector('.modal')
+const modalContent = modal.querySelector('.modal-content')
+const backBtn = modal.querySelector('.back-btn')
+const modalTitle = document.createElement('h3')
+const separator = document.createElement('hr')
+const actionButton = document.createElement('button')
 
+const deleteWorkModal = () => {
     modal.style.display = 'flex'
+    backBtn.style.display = 'none'
+    modalContent.innerHTML = ''
+
+    // Fermer la modale
     modal.addEventListener('click', closeModal)
     modal.querySelector('.modal-close').addEventListener('click', closeModal)
     modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation)
 
+    // Titre de la modale
+    modalTitle.classList.add('modal-title')
+    modalContent.appendChild(modalTitle)
+    modalTitle.textContent = 'Galerie photo'
+
     // Création de modal-gallery
     let modalGallery = modal.querySelector('.modal-gallery')
-    if (!modalGallery) {
-        modalGallery = document.createElement('div')
-        modalGallery.classList.add('modal-gallery')
-        modalContent.appendChild(modalGallery)
+    modalGallery = document.createElement('div')
+    modalGallery.classList.add('modal-gallery')
+    modalContent.appendChild(modalGallery)
+
+    if (works) {
+        displayProjectsGallery(works, modalGallery, false, true) // Passer 'true' pour activer le mode modale
     }
 
-    if (type === 'gallery') {
-        modalTitle.textContent = 'Galerie photo'
-        if (works) {
-            displayProjectsGallery(works, modalGallery, false, true) // Passer 'true' pour activer le mode modale
-        }
-        actionButton.textContent = 'Ajouter une photo'
-        actionButton.addEventListener('click', () => openModal('modal-add'))
-    }    
-
-    // Création de modal-add
-    if (type === 'modal-add') {
-        modalTitle.innerHTML = 'Ajout photo'
-    }
-
+    // Séparateur
     modalContent.appendChild(separator)
+    // Bouton bas
+    actionButton.classList.add('modal-btn')
+    actionButton.textContent = 'Ajouter une photo'
+    actionButton.addEventListener('click', () => addWorkModal())
     modalContent.appendChild(actionButton)
 
     // Icone delete
@@ -87,9 +86,33 @@ const openModal = (type = 'gallery') => {
     })
 }
 
+const addWorkModal = () => {
+    modal.style.display = 'flex'
+    backBtn.style.display = 'flex'
+    backBtn.addEventListener('click', deleteWorkModal)
+    modalContent.innerHTML = ''
+
+    // Fermer la modale
+    modal.addEventListener('click', closeModal)
+    modal.querySelector('.modal-close').addEventListener('click', closeModal)
+    modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation)
+
+    // Titre de la modale
+    modalTitle.classList.add('modal-title')
+    modalContent.appendChild(modalTitle)
+    modalTitle.textContent = 'Ajout photo'
+
+    // Séparateur
+    modalContent.appendChild(separator)
+    // Bouton bas
+    actionButton.classList.add('modal-btn')
+    actionButton.textContent = 'Valider'
+    modalContent.appendChild(actionButton)
+}
+
+
 const closeModal = (event) => {
     event.preventDefault()
-    const modal = document.querySelector('.modal')
     modal.style.display = 'none'
     modal.removeEventListener('click', closeModal)
     modal.querySelector('.modal-close').removeEventListener('click', closeModal)
@@ -106,4 +129,4 @@ window.addEventListener('keydown', function (press) {
     }
 })
 
-export { openModal, closeModal }
+export { deleteWorkModal, closeModal }

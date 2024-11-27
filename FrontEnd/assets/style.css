@@ -332,10 +332,22 @@ footer nav ul {
 	overflow: auto;
 	animation: slideFromTop 300ms both;
 }
+.back-btn {
+	position: absolute;
+	left: 30px;
+	top: 30px;
+	cursor: pointer;
+	font-size: 22px;
+	transition: 500ms;
+}
+.back-btn:hover {
+	color: #B1663C;
+	transform: scale(1.20);
+}
 .modal-close {
 	position: absolute;
-	right: 20px;
-	top: 20px;
+	right: 30px;
+	top: 30px;
 	cursor: pointer;
 	font-size: 22px;
 	transition: 500ms;
