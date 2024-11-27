@@ -38,19 +38,54 @@ const userAuth = async (user) => {
 }
 
 const deleteWorks = async (imageId) => {
+
+    const token = sessionStorage.getItem("authToken") // Récupération du token
+    if (!token) {
+        return false
+    }
     try {
-        const urlAPIDelete = `${urlAPIProjects}/${imageId}`;
+        const urlAPIDelete = `${urlAPIProjects}/${imageId}`
         const response = await fetch(urlAPIDelete, {
             method: 'DELETE',
-        });
-
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         if (!response.ok) {
-            throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`)
         }
-        return true;
+        return true // Si la suppression a réussi, retourner true
     } catch (error) {
         console.error("Error:", error.message)
+        alert("Erreur lors de la suppression de l'image. Vérifiez votre connexion.")
+        return false // Retourner false en cas d'erreur
     }
-};
+}
 
-export { getWorks, deleteWorks, getCategories, userAuth }
+const postWorks = async (imageData) => {
+    try {
+      const response = await fetch('http://localhost:5678/api/works', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(imageData), // Envoi de l'image et ses données
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'ajout de l\'image.');
+      }
+  
+      const newImage = await response.json();
+      // Mettre à jour la galerie avec la nouvelle image
+      works.push(newImage);
+      displayProjectsGallery(works, gallery);
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'image :', error.message);
+    }
+  };
+
+
+
+export { getWorks, deleteWorks, postWorks, getCategories, userAuth }
