@@ -1,3 +1,5 @@
+import { deleteWorks, getWorks } from "./api.js"
+
 /* POUR L'ANCRE CONTACT DEPUIS PAGE LOGIN */
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash) {
@@ -24,13 +26,13 @@ const displayProjectsGallery = (projects, container, displayFigcaption = true, i
     projects.forEach((project) => {
         const figure = document.createElement('figure')
         const figureImg = document.createElement('img')
-        figureImg.src = project.imageUrl // URL de l'image
-        figureImg.alt = project.title // Texte alternatif
-        figureImg.dataset.id = project.id // Ajoute l'ID de l'image
+        figureImg.src = project.imageUrl
+        figureImg.alt = project.title
+        figureImg.dataset.id = project.id
 
         figure.append(figureImg)
 
-        // Ajouter une légende si `displayFigcaption` est `true`
+        // Ajouter une légende si displayFigcaption est true
         if (displayFigcaption) {
             const figcaption = document.createElement('figcaption')
             figcaption.textContent = project.title
@@ -40,10 +42,10 @@ const displayProjectsGallery = (projects, container, displayFigcaption = true, i
         // Ajouter l'icône de poubelle uniquement dans la modale
         if (isModal) {
             const trashIconWrapper = document.createElement('div')
-            trashIconWrapper.classList.add('delete-img') // Classe pour l'icône de la poubelle
+            trashIconWrapper.classList.add('delete-img')
 
             const trashIcon = document.createElement('i')
-            trashIcon.classList.add('fa-solid', 'fa-trash-can') // Icône FontAwesome
+            trashIcon.classList.add('fa-solid', 'fa-trash-can')
             trashIconWrapper.appendChild(trashIcon)
 
             // Positionner l'icône sur l'image (en haut à droite)
@@ -51,39 +53,7 @@ const displayProjectsGallery = (projects, container, displayFigcaption = true, i
             figure.appendChild(trashIconWrapper)
 
             // Ajouter l'événement pour supprimer l'image
-            trashIconWrapper.addEventListener('click', async (event) => {
-                event.stopPropagation() // Empêcher la propagation du clic
-
-                // Confirmer la suppression
-                const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")
-                if (!confirmation) return
-
-                const imageId = project.id
-
-                try {
-                    // Supprimer l'image via l'API
-                    const deletesuccess = await deleteWorks(imageId) // Appeler l'API pour supprimer l'image
-
-                    if (deletesuccess) {
-                        // Supprimer l'image de la modale
-                        figure.remove()
-
-                        // Supprimer l'image de la page principale
-                        const galleryFigure = document.querySelector(`img[data-id="${imageId}"]`)
-                        if (galleryFigure) {
-                            galleryFigure.closest('figure').remove() // Supprimer l'image de la page principale
-                        }
-
-                        console.log(`L'image avec l'ID ${imageId} a été supprimée avec succès.`)
-                    } else {
-                        console.error("Échec de la suppression de l'image.")
-                        alert("Impossible de supprimer l'image. Veuillez réessayer.")
-                    }
-                } catch (error) {
-                    console.error("Erreur lors de la suppression :", error.message)
-                    alert("Une erreur est survenue lors de la suppression.")
-                }
-            })
+            trashIconWrapper.addEventListener('click', () => makeDeletable(project.id))
         }
 
         container.appendChild(figure) // Ajouter la figure au conteneur
@@ -108,6 +78,7 @@ function activeBtn(button) {
     button.classList.add("active")
 }
 
+// MESSAGE D'ERREUR DE CONNEXION
 function displayErrorMessage() {
     // Vérifie s'il y a déjà un message d'erreur
     const activeErrorBox = document.querySelector(".errorBox")
@@ -124,4 +95,26 @@ function displayErrorMessage() {
     document.querySelector("form").prepend(errorBox)
 }
 
-export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn }
+const makeDeletable = async (workId) => {
+
+    const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")
+    if (confirmation) {
+        try {
+            await deleteWorks(workId)
+            refreshGalleries();
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error.message)
+            alert("Une erreur est survenue lors de la suppression.")
+        }
+    }
+}
+
+const refreshGalleries = async () => {
+    const gallery = document.querySelector(".gallery")
+    const modalGallery = document.querySelector(".modal-gallery")
+    const projects = await getWorks()
+    displayProjectsGallery(projects, modalGallery, false, true)
+    displayProjectsGallery(projects, gallery, true)
+}
+
+export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, refreshGalleries }

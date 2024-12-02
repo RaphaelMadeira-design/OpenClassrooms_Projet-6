@@ -1,5 +1,5 @@
-import { getWorks, deleteWorks, getCategories } from './api.js'
-import { displayProjectsGallery } from './functions.js'
+import { getWorks, addWorks } from './api.js'
+import { displayProjectsGallery, makeDeletable, refreshGalleries } from './functions.js'
 
 const works = await getWorks()
 
@@ -26,8 +26,7 @@ const deleteWorkModal = () => {
     modalTitle.textContent = 'Galerie photo'
 
     // Création de modal-gallery
-    let modalGallery = modal.querySelector('.modal-gallery')
-    modalGallery = document.createElement('div')
+    let modalGallery = document.createElement('div')
     modalGallery.classList.add('modal-gallery')
     modalContent.appendChild(modalGallery)
 
@@ -48,7 +47,7 @@ const deleteWorkModal = () => {
     modalGalleryImg.forEach(modalImg => {
         const modalFigure = modalImg.closest('figure')
         if (modalFigure) {
-            const deleteImg = document.createElement('delete-img')
+            const deleteImg = document.createElement('span')
             deleteImg.classList.add('delete-img')
             const deleteImgIcon = document.createElement('i')
             deleteImgIcon.classList.add('fa-solid', 'fa-trash-can')
@@ -57,31 +56,8 @@ const deleteWorkModal = () => {
             modalFigure.style.position = 'relative'
             modalFigure.appendChild(deleteImg)
 
-            deleteImg.addEventListener('click', async (event) => {
-                event.stopPropagation()
+            deleteImg.addEventListener('click', () => makeDeletable(modalImg.dataset.id))
 
-                const imageId = modalImg.dataset.id
-                const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")
-                if (confirmation) {
-                    try {
-                        const deleteSuccess = await deleteWorks(imageId)
-                        if (deleteSuccess) {
-                            modalFigure.remove() // Retirer l'image de la modale
-
-                            // Retirer également l'image de la galerie principale
-                            const galleryFigure = document.querySelector(`img[data-id="${imageId}"]`)
-                            if (galleryFigure) {
-                                galleryFigure.closest('figure').remove()
-                            }
-                        } else {
-                            alert("La suppression a échoué.")
-                        }
-                    } catch (error) {
-                        console.error("Erreur lors de la suppression :", error.message)
-                        alert("Une erreur est survenue lors de la suppression.")
-                    }
-                }
-            })
         }
     })
 }
@@ -128,5 +104,12 @@ window.addEventListener('keydown', function (press) {
         closeModal(press)
     }
 })
+
+const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    await addWorks(formData);
+    await refreshGalleries();
+}
 
 export { deleteWorkModal, closeModal }
