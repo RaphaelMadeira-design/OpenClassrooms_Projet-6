@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const displayProjectsGallery = (projects, container, displayFigcaption = true, isModal = false) => {
+    if (!container) {
+        console.error("Conteneur non défini pour afficher la galerie.")
+        return
+    }
     container.innerHTML = '' // Vide le conteneur précédent
 
     projects.forEach((project) => {
@@ -32,14 +36,12 @@ const displayProjectsGallery = (projects, container, displayFigcaption = true, i
 
         figure.append(figureImg)
 
-        // Ajouter une légende si displayFigcaption est true
         if (displayFigcaption) {
             const figcaption = document.createElement('figcaption')
             figcaption.textContent = project.title
             figure.append(figcaption)
         }
 
-        // Ajouter l'icône de poubelle uniquement dans la modale
         if (isModal) {
             const trashIconWrapper = document.createElement('div')
             trashIconWrapper.classList.add('delete-img')
@@ -48,15 +50,12 @@ const displayProjectsGallery = (projects, container, displayFigcaption = true, i
             trashIcon.classList.add('fa-solid', 'fa-trash-can')
             trashIconWrapper.appendChild(trashIcon)
 
-            // Positionner l'icône sur l'image (en haut à droite)
             figure.style.position = 'relative'
             figure.appendChild(trashIconWrapper)
 
-            // Ajouter l'événement pour supprimer l'image
             trashIconWrapper.addEventListener('click', () => makeDeletable(project.id))
         }
-
-        container.appendChild(figure) // Ajouter la figure au conteneur
+        container.appendChild(figure)
     })
 }
 
@@ -74,7 +73,6 @@ function activeBtn(button) {
     buttons.forEach(function (btn) {
         btn.classList.remove("active")
     })
-
     button.classList.add("active")
 }
 
@@ -87,21 +85,20 @@ function displayErrorMessage() {
     }
 
     // Crée un nouvel élément d'erreur
-    const errorBox = document.createElement("div")
-    errorBox.className = "errorBox"
-    errorBox.textContent = "E-mail ou mot de passe incorrect"
+    const errorBox = document.createElement('div')
+    errorBox.className = 'errorBox'
+    errorBox.textContent = 'E-mail ou mot de passe incorrect'
 
     // Insère l'élément d'erreur dans le formulaire
     document.querySelector("form").prepend(errorBox)
 }
 
 const makeDeletable = async (workId) => {
-
-    const confirmation = window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")
+    const confirmation = window.confirm('Êtes-vous sûr de vouloir supprimer cette image ?')
     if (confirmation) {
         try {
             await deleteWorks(workId)
-            refreshGalleries();
+            refreshGalleries()
         } catch (error) {
             console.error("Erreur lors de la suppression :", error.message)
             alert("Une erreur est survenue lors de la suppression.")
@@ -113,8 +110,32 @@ const refreshGalleries = async () => {
     const gallery = document.querySelector(".gallery")
     const modalGallery = document.querySelector(".modal-gallery")
     const projects = await getWorks()
-    displayProjectsGallery(projects, modalGallery, false, true)
-    displayProjectsGallery(projects, gallery, true)
+    if (gallery) {
+        displayProjectsGallery(projects, gallery, true)
+    }
+    if (modalGallery) {
+        displayProjectsGallery(projects, modalGallery, false, true)
+    }
 }
 
-export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, refreshGalleries }
+// Fonction pour vérifier si le formulaire est complet
+function checkFormCompletion(formElements, modalButton) {
+    const titleInput = formElements.titleInput
+    const categorySelect = formElements.categorySelect
+    const fileInput = formElements.fileInput
+
+    const titleFilled = titleInput.value.trim() !== ''
+    const categoryFilled = categorySelect.value !== ''
+    const imageFilled = fileInput.files.length > 0
+
+    // Vérifier si le formulaire est complet
+    if (titleFilled && categoryFilled && imageFilled) {
+        modalButton.disabled = false // Activer le bouton si tout est rempli
+        modalButton.classList.remove('disabled') // Enlever la classe disabled
+    } else {
+        modalButton.disabled = true // Désactiver le bouton si un champ est vide
+        modalButton.classList.add('disabled') // Ajouter la classe disabled
+    }
+}
+
+export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, refreshGalleries, checkFormCompletion }
