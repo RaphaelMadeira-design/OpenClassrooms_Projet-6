@@ -1,4 +1,5 @@
-import { deleteWorks, getWorks } from "./api.js"
+import { deleteWorks, getWorks, addWorks } from "./api.js"
+import { closeModal } from "./modal.js"
 
 /* POUR L'ANCRE CONTACT DEPUIS PAGE LOGIN */
 document.addEventListener('DOMContentLoaded', () => {
@@ -83,12 +84,10 @@ function displayErrorMessage() {
     if (activeErrorBox) {
         activeErrorBox.remove() // Supprime l'ancien message d'erreur
     }
-
     // Crée un nouvel élément d'erreur
     const errorBox = document.createElement('div')
     errorBox.className = 'errorBox'
     errorBox.textContent = 'E-mail ou mot de passe incorrect'
-
     // Insère l'élément d'erreur dans le formulaire
     document.querySelector("form").prepend(errorBox)
 }
@@ -103,6 +102,19 @@ const makeDeletable = async (workId) => {
             console.error("Erreur lors de la suppression :", error.message)
             alert("Une erreur est survenue lors de la suppression.")
         }
+        alert('Votre image a bien été supprimée')
+        closeModal() // Fermer la modale
+    }
+}
+
+const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const success = await addWorks(formData)
+    if (success) {
+        refreshGalleries() // Actualiser la galerie après succès
+        alert('Votre image a bien été envoyée')
+        closeModal() // Fermer la modale
     }
 }
 
@@ -138,4 +150,4 @@ function checkFormCompletion(formElements, modalButton) {
     }
 }
 
-export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, refreshGalleries, checkFormCompletion }
+export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, handleSubmit, refreshGalleries, checkFormCompletion }

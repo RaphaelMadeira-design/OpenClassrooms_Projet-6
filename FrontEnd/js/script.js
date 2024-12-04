@@ -54,13 +54,13 @@ function adminMode() {
             editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i><p>modifier</p>'
             portfolioTitle.appendChild(editBtn)
 
-            // Ouvrir la modal pour modifier ou supprimer les projets
+            // Ouvrir la modal 'deleteWorkModal'
             editBtn.addEventListener('click', () => deleteWorkModal())
         }
 
         // Masquer les filtres avec `visibility: hidden`
         if (filters) {
-            filters.style.visibility = "hidden" // Cache les filtres sans retirer leur espace
+            filters.style.visibility = "hidden" // Cache les filtres sans retirer l'espace
         }
         // Changer le bouton en mode "logout"
         authBtn.textContent = "logout"

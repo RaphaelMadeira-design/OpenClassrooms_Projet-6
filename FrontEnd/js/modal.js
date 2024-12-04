@@ -1,5 +1,5 @@
-import { getWorks, getCategories, addWorks } from './api.js'
-import { displayProjectsGallery, makeDeletable, refreshGalleries, checkFormCompletion } from './functions.js'
+import { getWorks, getCategories } from './api.js'
+import { displayProjectsGallery, makeDeletable, handleSubmit, refreshGalleries, checkFormCompletion } from './functions.js'
 
 const works = await getWorks()
 const categories = await getCategories()
@@ -64,17 +64,12 @@ const deleteWorkModal = () => {
 }
 
 const addWorkModal = () => {
-    // Afficher la modale et le bouton "retour"
     modal.style.display = 'flex'
     backBtn.style.display = 'flex'
-
-    // Ajouter un événement pour fermer la modale lorsqu'on clique sur le bouton retour
     backBtn.addEventListener('click', deleteWorkModal)
-
-    // Réinitialiser le contenu de la modale pour éviter que du contenu précédent persiste
     modalContent.innerHTML = ''
 
-    // Fermer la modale lorsque l'utilisateur clique en dehors de celle-ci
+    // Fermer la modale lorsque l'utilisateur clique en dehors
     modal.addEventListener('click', closeModal)
     modal.querySelector('.modal-close').addEventListener('click', closeModal)
     modal.querySelector('.modal-wrapper').addEventListener('click', stopPropagation)
@@ -87,8 +82,8 @@ const addWorkModal = () => {
     // Création du formulaire
     const form = document.createElement('form')
     form.id = 'add-work-form'
-    form.enctype = 'multipart/form-data' // Permet de soumettre des fichiers
-    form.classList.add('modal-form') // Ajouter une classe de style
+    form.enctype = 'multipart/form-data'
+    form.classList.add('modal-form')
 
     // Section d'upload de l'image
     const uploadSection = document.createElement('div')
@@ -113,16 +108,16 @@ const addWorkModal = () => {
     fileInput.classList.add('file-input')
     uploadButton.appendChild(fileInput)
 
-    // Texte informatif pour le fichier
+    // Texte pour le type de fichier
     const fileInfo = document.createElement('span')
     fileInfo.classList.add('file-info')
     fileInfo.textContent = 'jpg, png : 4mo max'
     uploadSection.appendChild(fileInfo)
 
-    // Conteneur pour la prévisualisation de l'image
+    // Conteneur pour la preview de l'image
     const previewContainer = document.createElement('div')
     previewContainer.classList.add('preview-container')
-    previewContainer.style.display = 'none' // Cacher la prévisualisation au départ
+    previewContainer.style.display = 'none' // Cacher la preview au départ
     uploadSection.appendChild(previewContainer)
 
     const previewImage = document.createElement('img')
@@ -144,7 +139,7 @@ const addWorkModal = () => {
                 // Modifier le padding de .upload-section lorsque l'image est prévisualisée
                 uploadSection.style.padding = '0' // Supprimer le padding
 
-                // Basculer la vue : cacher le placeholder et afficher la preview
+                // Basculer la vue : cacher le placeholder et afficher juste la preview
                 placeholderIcon.style.display = 'none'
                 uploadButton.style.display = 'none'
                 fileInfo.style.display = 'none'
@@ -206,12 +201,12 @@ const addWorkModal = () => {
     categorySelect.classList.add('form-select')
     categoryGroup.appendChild(categorySelect)
 
-    // Ajouter une option vide au début pour éviter la sélection automatique
+    // Option vide pour éviter la sélection automatique
     const emptyOption = document.createElement('option')
-    emptyOption.style.display = 'none' // Masquer cette option
+    emptyOption.style.display = 'none'
     categorySelect.appendChild(emptyOption)
 
-    // Charger les catégories depuis l'API
+    // Chargement les catégories depuis l'API
     categories.forEach(category => {
         const option = document.createElement('option')
         option.value = category.id
@@ -225,10 +220,10 @@ const addWorkModal = () => {
 
     form.appendChild(categoryGroup)
 
-    // Ajouter le formulaire complet à la modale
+    // Ajouter le formulaire
     modalContent.appendChild(form)
 
-    // Séparateur (ajouter au contenu de la modale, si nécessaire)
+    // Séparateur
     modalContent.appendChild(separator)
 
     // Bouton "Valider" pour soumettre le formulaire
@@ -246,19 +241,20 @@ const addWorkModal = () => {
         form.requestSubmit() // Soumettre le formulaire
     })
 
-    // Initialisation des éléments pour la validation du formulaire
+    // Éléments pour que le formulaire soit valide
     const formElements = {
         titleInput,
         categorySelect,
         fileInput
     }
 
-    // Initialiser l'état du bouton au chargement de la modale
+    // État du bouton au chargement de la modale
     checkFormCompletion(formElements, modalButton)
+    // Refresh des éléments
     refreshGalleries()
 }
 
-const closeModal = (event) => {
+const closeModal = async (event) => {
     if (event && event.preventDefault) {
         event.preventDefault()
     }
@@ -279,17 +275,6 @@ window.addEventListener('keydown', function (press) {
         closeModal(press)
     }
 })
-
-const handleSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
-    const success = await addWorks(formData)
-    if (success) {
-        await refreshGalleries() // Actualiser la galerie après succès
-        closeModal() // Fermer la modale
-        alert('Votre image a bien été envoyée')
-    }
-}
 
 // Ajout d'un gestionnaire DOMContentLoaded et gestion des événements principaux
 document.addEventListener('DOMContentLoaded', async () => {
