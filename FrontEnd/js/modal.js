@@ -1,5 +1,5 @@
-import { getWorks, getCategories } from './api.js'
-import { displayProjectsGallery, makeDeletable, handleSubmit, refreshGalleries, checkFormCompletion } from './functions.js'
+import { getWorks, getCategories, addWorks } from './api.js'
+import { displayProjectsGallery, makeDeletable, refreshGalleries, checkFormCompletion } from './functions.js'
 
 const works = await getWorks()
 const categories = await getCategories()
@@ -254,7 +254,7 @@ const addWorkModal = () => {
     refreshGalleries()
 }
 
-const closeModal = async (event) => {
+const closeModal = (event) => {
     if (event && event.preventDefault) {
         event.preventDefault()
     }
@@ -275,6 +275,17 @@ window.addEventListener('keydown', function (press) {
         closeModal(press)
     }
 })
+
+const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const success = await addWorks(formData)
+    if (success) {
+        await refreshGalleries()
+        alert('Votre image a bien été envoyée')
+        closeModal()
+    }
+}
 
 // Ajout d'un gestionnaire DOMContentLoaded et gestion des événements principaux
 document.addEventListener('DOMContentLoaded', async () => {

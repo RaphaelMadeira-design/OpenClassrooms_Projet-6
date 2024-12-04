@@ -1,5 +1,4 @@
-import { deleteWorks, getWorks, addWorks } from "./api.js"
-import { closeModal } from "./modal.js"
+import { deleteWorks, getWorks } from "./api.js"
 
 /* POUR L'ANCRE CONTACT DEPUIS PAGE LOGIN */
 document.addEventListener('DOMContentLoaded', () => {
@@ -103,18 +102,6 @@ const makeDeletable = async (workId) => {
             alert("Une erreur est survenue lors de la suppression.")
         }
         alert('Votre image a bien été supprimée')
-        closeModal() // Fermer la modale
-    }
-}
-
-const handleSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
-    const success = await addWorks(formData)
-    if (success) {
-        refreshGalleries() // Actualiser la galerie après succès
-        alert('Votre image a bien été envoyée')
-        closeModal() // Fermer la modale
     }
 }
 
@@ -150,4 +137,4 @@ function checkFormCompletion(formElements, modalButton) {
     }
 }
 
-export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, handleSubmit, refreshGalleries, checkFormCompletion }
+export { displayProjectsGallery, displayErrorMessage, createBtn, activeBtn, makeDeletable, refreshGalleries, checkFormCompletion }
